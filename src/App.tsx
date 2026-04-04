@@ -27,7 +27,7 @@ const ROLES: RoleOption[] = [
     border: 'hover:border-violet-400',
     iconBg: 'bg-gradient-to-br from-violet-500 to-purple-600 text-white',
     shadow: 'shadow-violet-500/20',
-    redirectUrl: 'https://botisystem.com/Esco_Express',
+    redirectUrl: 'https://botisystem.com/Esco_Express/owner-crm',
   },
   {
     key: 'manager',
