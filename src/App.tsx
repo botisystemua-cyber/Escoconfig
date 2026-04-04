@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ShieldCheck, Users, Eye, EyeOff, LogIn, Loader2, LogOut, ArrowLeft, CircleCheck, AlertCircle, Truck } from 'lucide-react';
-import { Logo, API_URL } from './components/shared';
+import { ShieldCheck, Users, Eye, EyeOff, LogIn, Loader2, LogOut, ArrowLeft, CircleCheck, AlertCircle, Truck, UserRound } from 'lucide-react';
+import { Logo } from './components/shared';
+// API_URL temporarily unused — real auth hidden for now
 
-type Role = 'owner' | 'manager' | 'driver';
+type Role = 'owner' | 'manager' | 'driver' | 'client';
 
 interface RoleOption {
   key: Role;
@@ -13,6 +14,7 @@ interface RoleOption {
   border: string;
   iconBg: string;
   shadow: string;
+  redirectUrl: string;
 }
 
 const ROLES: RoleOption[] = [
@@ -25,6 +27,7 @@ const ROLES: RoleOption[] = [
     border: 'hover:border-violet-400',
     iconBg: 'bg-gradient-to-br from-violet-500 to-purple-600 text-white',
     shadow: 'shadow-violet-500/20',
+    redirectUrl: 'https://botisystem.com/Esco_Express',
   },
   {
     key: 'manager',
@@ -35,6 +38,7 @@ const ROLES: RoleOption[] = [
     border: 'hover:border-blue-400',
     iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white',
     shadow: 'shadow-blue-500/20',
+    redirectUrl: 'https://botisystem.com/Esco_Express',
   },
   {
     key: 'driver',
@@ -45,6 +49,18 @@ const ROLES: RoleOption[] = [
     border: 'hover:border-emerald-400',
     iconBg: 'bg-gradient-to-br from-emerald-500 to-green-600 text-white',
     shadow: 'shadow-emerald-500/20',
+    redirectUrl: 'https://botisystem.com/Esco_Express/driver-crm',
+  },
+  {
+    key: 'client',
+    label: 'Клієнт',
+    sublabel: 'Перегляд відправлень',
+    icon: UserRound,
+    gradient: 'from-amber-500 to-orange-600',
+    border: 'hover:border-amber-400',
+    iconBg: 'bg-gradient-to-br from-amber-500 to-orange-600 text-white',
+    shadow: 'shadow-amber-500/20',
+    redirectUrl: 'https://botisystem.com/Esco_Express/client-crm',
   },
 ];
 
@@ -65,6 +81,11 @@ function App() {
   const [user, setUser] = useState<AuthResult['user'] | null>(null);
 
   const handleRoleSelect = (role: RoleOption) => {
+    // Client — no login, redirect immediately
+    if (role.key === 'client') {
+      window.location.href = role.redirectUrl;
+      return;
+    }
     setSelectedRole(role);
     setStep('login');
     setLogin('');
@@ -87,31 +108,15 @@ function App() {
     setLoading(true);
     setError('');
 
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        redirect: 'follow',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'login',
-          role: selectedRole!.key,
-          login: login.trim(),
-          password: password.trim(),
-        }),
-      });
-      const data: AuthResult = await res.json();
-
-      if (data.success && data.user) {
-        setUser(data.user);
-        setStep('success');
-      } else {
-        setError(data.error || 'Невірний логін або пароль');
-      }
-    } catch {
-      setError('Помилка мережі. Спробуйте ще раз.');
-    } finally {
-      setLoading(false);
-    }
+    // Fake login — accept any credentials, skip API verification
+    await new Promise((r) => setTimeout(r, 600));
+    setUser({
+      name: login.trim(),
+      role: selectedRole!.label,
+      staffId: 'DEMO',
+    });
+    setStep('success');
+    setLoading(false);
   };
 
   const handleLogout = () => {
@@ -269,10 +274,6 @@ function App() {
 
             <div className="mt-6 sm:mt-8 bg-bg rounded-xl sm:rounded-2xl p-4 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-xs sm:text-sm text-muted">ID</span>
-                <span className="font-mono text-xs sm:text-sm font-bold text-text-secondary bg-card px-2.5 py-1 rounded-lg">{user.staffId}</span>
-              </div>
-              <div className="flex justify-between items-center">
                 <span className="text-xs sm:text-sm text-muted">Статус</span>
                 <span className="text-xs sm:text-sm font-bold text-success flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
@@ -281,9 +282,17 @@ function App() {
               </div>
             </div>
 
+            <a
+              href={selectedRole.redirectUrl}
+              className={`w-full mt-5 sm:mt-6 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-white text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 transition-all active:scale-[0.97] bg-gradient-to-r ${selectedRole.gradient} shadow-lg ${selectedRole.shadow} hover:shadow-xl hover:brightness-110 no-underline`}
+            >
+              <LogIn className="w-5 h-5" />
+              Перейти до системи
+            </a>
+
             <button
               onClick={handleLogout}
-              className="w-full mt-6 sm:mt-8 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 border-border text-sm sm:text-base font-bold text-text-secondary hover:bg-bg hover:border-red-200 hover:text-error cursor-pointer transition-all active:scale-[0.97] flex items-center justify-center gap-2"
+              className="w-full mt-3 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl border-2 border-border text-sm sm:text-base font-bold text-text-secondary hover:bg-bg hover:border-red-200 hover:text-error cursor-pointer transition-all active:scale-[0.97] flex items-center justify-center gap-2"
             >
               <LogOut className="w-4.5 h-4.5" />
               Вийти
