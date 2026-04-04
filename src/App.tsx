@@ -260,11 +260,11 @@ function App() {
       {step === 'success' && user && selectedRole && (
         <div className="animate-[scaleIn_0.35s_ease-out]">
           <div className="bg-card border-2 border-border rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-sm text-center">
-            <div className={`inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br ${selectedRole.gradient} shadow-xl ${selectedRole.shadow} mb-5`}>
+            <div className={`mx-auto flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br ${selectedRole.gradient} shadow-xl ${selectedRole.shadow} mb-4`}>
               <selectedRole.icon className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
             </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 text-success text-xs sm:text-sm font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 text-success text-xs sm:text-sm font-bold mb-5">
               <CircleCheck className="w-4 h-4" />
               Авторизовано
             </div>
