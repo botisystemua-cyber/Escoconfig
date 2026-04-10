@@ -122,11 +122,15 @@ function App() {
       const data: AuthResult = await res.json();
 
       if (data.success && data.user) {
+        // Session for owner-crm
         localStorage.setItem('boti_session', JSON.stringify({
           user_login: login.trim(),
           user_name: data.user.name,
           role: selectedRole!.key,
         }));
+        // Session for manager CRM (Esco_Express)
+        localStorage.setItem('oksi_manager_name', data.user.name);
+        localStorage.setItem('oksi_manager_staff_id', data.user.staffId);
         setUser(data.user);
         setStep('success');
       } else {
