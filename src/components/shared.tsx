@@ -20,4 +20,4 @@ export function Logo({ size = 'lg' }: { size?: 'lg' | 'md' | 'sm' }) {
   );
 }
 
-export const API_URL = 'https://script.google.com/macros/s/AKfycbwjVyjbIISoN0FYDMRhCaYHMwCFRM8FlxI6y1ODbnRlLcNMCHEfW5wYukSQcLTfEBZh/exec';
+export const API_URL = 'https://script.google.com/macros/s/AKfycbxOGvT0xh_4WnIDjaMpZInEPvfCHOnRciLbFbzRAwCEY13Nk2zoEPEYLTGimRI_MifF/exec';
