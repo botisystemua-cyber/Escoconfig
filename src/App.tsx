@@ -317,7 +317,7 @@ function App() {
       )}
 
       <p className="text-center text-[10px] sm:text-[11px] text-muted/50 mt-6 sm:mt-8 font-medium">
-        <span className="text-text/40 font-bold">Boti</span><span className="text-success/40 font-bold">Logistics</span> v1.0
+        <span className="text-blue-600/40 font-bold">Esco</span><span className="text-yellow-500/40 font-bold">Express</span> v1.0
       </p>
     </div>
   );
