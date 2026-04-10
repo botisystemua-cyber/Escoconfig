@@ -122,6 +122,11 @@ function App() {
       const data: AuthResult = await res.json();
 
       if (data.success && data.user) {
+        localStorage.setItem('boti_session', JSON.stringify({
+          user_login: login.trim(),
+          user_name: data.user.name,
+          role: selectedRole!.key,
+        }));
         setUser(data.user);
         setStep('success');
       } else {
