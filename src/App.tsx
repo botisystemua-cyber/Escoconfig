@@ -282,13 +282,19 @@ function App() {
               </div>
             </div>
 
-            <a
-              href={selectedRole.redirectUrl}
-              className={`w-full mt-5 sm:mt-6 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-white text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 transition-all active:scale-[0.97] bg-gradient-to-r ${selectedRole.gradient} shadow-lg ${selectedRole.shadow} hover:shadow-xl hover:brightness-110 no-underline`}
+            <button
+              onClick={() => {
+                if (user) {
+                  localStorage.setItem('oksi_manager_name', user.name);
+                  localStorage.setItem('oksi_manager_staff_id', user.staffId);
+                }
+                window.location.href = selectedRole.redirectUrl;
+              }}
+              className={`w-full mt-5 sm:mt-6 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl text-white text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 cursor-pointer transition-all active:scale-[0.97] bg-gradient-to-r ${selectedRole.gradient} shadow-lg ${selectedRole.shadow} hover:shadow-xl hover:brightness-110`}
             >
               <LogIn className="w-5 h-5" />
               Перейти до системи
-            </a>
+            </button>
 
             <button
               onClick={handleLogout}
