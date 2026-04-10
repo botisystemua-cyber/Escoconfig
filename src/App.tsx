@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ShieldCheck, Users, Eye, EyeOff, LogIn, Loader2, LogOut, ArrowLeft, CircleCheck, AlertCircle, Truck, UserRound } from 'lucide-react';
-import { Logo } from './components/shared';
-// API_URL temporarily unused — real auth hidden for now
+import { Logo, API_URL } from './components/shared';
 
 type Role = 'owner' | 'manager' | 'driver' | 'client';
 
@@ -108,15 +107,31 @@ function App() {
     setLoading(true);
     setError('');
 
-    // Fake login — accept any credentials, skip API verification
-    await new Promise((r) => setTimeout(r, 600));
-    setUser({
-      name: login.trim(),
-      role: selectedRole!.label,
-      staffId: 'DEMO',
-    });
-    setStep('success');
-    setLoading(false);
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          action: 'login',
+          role: selectedRole!.key,
+          login: login.trim(),
+          password: password.trim(),
+        }),
+      });
+
+      const data: AuthResult = await res.json();
+
+      if (data.success && data.user) {
+        setUser(data.user);
+        setStep('success');
+      } else {
+        setError(data.error || 'Помилка авторизації');
+      }
+    } catch {
+      setError('Сервер недоступний. Спробуйте пізніше.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = () => {
